@@ -1,0 +1,16 @@
+#!/bin/bash
+
+$ python3 assignment2-transactions-template.py 
+Mean temperature= 10.0 - expected value=10
+Temperature at "20"= 11 - expected value=11
+Mean temperature= 10.0 - expected value=10
+Mean temperature= 10.0 - expected value=10
+Mean temperature= 10.0 - expected value=10
+Mean temperature= 4.0 - expected value=4
+Traceback (most recent call last):
+  File "assignment2-transactions-template.py", line 202, in <module>
+    db.temperature.insert({10: 20})
+  File "assignment2-transactions-template.py", line 96, in insert
+    "You are not allowed to overwrite values "
+__main__.OverwriteNotAllowed: You are not allowed to overwrite values already existing in database
+
