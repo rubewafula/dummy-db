@@ -11,8 +11,6 @@ class OverwriteNotAllowed(Exception):
         self.message = message
         super().__init__(self.message)
 
-
-
 class Database:
     """
     """
@@ -52,10 +50,6 @@ class Database:
         """
         auto_commit = True
 
-        """
-        Lock to ensure atomicity when handling trnsactions
-        """
-        _lock = False
 
         def __init__(self, name):
             self.table_name = name
@@ -148,6 +142,7 @@ class Database:
         def rollback(self):
             self.database.update(self._transaction_copy)
             self.clear_transaction()
+            self.auto_commit=True
 
         def mean(self):
             if self.database:
