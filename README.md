@@ -1,4 +1,7 @@
-# Problem
+# dummy-db Dummy db class
+implementation
+
+## Problem
 
 Task: Implement a "library" (a set of classes) working with a simple
 transaction-supporting measurement database. The class Database expects a list
@@ -25,6 +28,3 @@ transaction are executed immediately.
 Submit a solution as one script named dummy-db.py using the file the template
 file as a template. Use the existing code as an API description, i.e. your code
 must work with the existing code in the template.
-
-# dummy-db Dummy db class
-implementation
