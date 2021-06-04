@@ -11,6 +11,8 @@ class OverwriteNotAllowed(Exception):
         self.message = message
         super().__init__(self.message)
 
+
+
 class Database:
     """
     """
@@ -23,7 +25,8 @@ class Database:
     def __init__(self, tables):
         if isinstance(tables, list):
             for table_name in tables:
-                setattr(Database, table_name, self.Table(table_name))
+                setattr(Database,  table_name, self.Table(table_name))
+
         else:
             raise Exception("Database tables must be passed as list")
     
@@ -36,23 +39,28 @@ class Database:
 
     class Table:
         """
-        Will keep our data in this object called database
-        """
-        database = {}
-        """
-        This will keep temporary transaction  information required for rollback
-        """
-        _transaction_queue = [] #  temp values to update (insert, delete, delete)
-        _transaction_copy  = {}  # copy of database values before this update
+        Notice the change is to move the class attributes to instance attributes
+        This way we maintan a copy for each instance of this class
+        Allowing out dynamic table to habour they own data at at point of instanciation
 
         """
-        Flag to enable disable transactions
-        """
-        auto_commit = True
-
-
         def __init__(self, name):
             self.table_name = name
+
+            """
+            Will keep our data in this object called database
+            """
+            self.database = {}
+            """
+            This will keep temporary transaction  information required for rollback
+            """
+            self._transaction_queue = [] #  temp values to update (insert, delete, delete)
+            self._transaction_copy  = {}  # copy of database values before this update
+
+            """
+            Flag to enable disable transactions
+            """
+            self.auto_commit = True
 
         """
         Will use this to keep a copy of ouf our database values before we
@@ -75,7 +83,7 @@ class Database:
         Clear transaction once done
         """
         def clear_transaction(self):
-            self._transaction_queue.clear()
+            self._transaction_queue=[]
             self._transaction_copy.clear()
 
         def insert(self, values):
@@ -142,7 +150,6 @@ class Database:
         def rollback(self):
             self.database.update(self._transaction_copy)
             self.clear_transaction()
-            self.auto_commit=True
 
         def mean(self):
             if self.database:
@@ -167,6 +174,12 @@ if __name__ == '__main__':
     db.temperature.insert({10: 10, 20: 11, 30: 9})
     print('Mean temperature=', db.temperature.mean(), '- expected value=10')
     print('Temperature at "20"=', db.temperature[20], '- expected value=11')
+
+    #Insert some values for pressure
+    db.pressure.insert({10: 1000})
+    print('Mean pressure=', db.pressure.mean(), '- expected value=1000')
+    print('Pressure at "10"=', db.pressure[10], '- expected value=1000')
+
 
     # Begin a new transaction
     db.temperature.transaction()
@@ -193,5 +206,15 @@ if __name__ == '__main__':
     db.temperature.commit()
     print('Mean temperature=', db.temperature.mean(), '- expected value=4')
 
+    print("Reading database for pressure", db.pressure.database)
+    print("Reading database for temperature", db.temperature.database)
     # Attempt to insert a new value with already existing index value - will raise an error
+
+    
+    db2 = Database(tables=["rainfall", "sunshine"]) 
+    db2.rainfall.insert({10: 11.20, 20: 11.23, 30: 9.0})
+    print("Reading database 2 values for rainfall ", db2.rainfall.database)
+
     db.temperature.insert({10: 20})
+
+
