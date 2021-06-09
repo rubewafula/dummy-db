@@ -186,6 +186,7 @@ if __name__ == '__main__':
 
     # Insert two items - queued
     db.temperature.insert({40: 19, 50: 21})
+    db.pressure.insert({40: 19,})
     # Delete one - queued
     db.temperature.delete([10])
     print('Mean temperature=', db.temperature.mean(), '- expected value=10')
